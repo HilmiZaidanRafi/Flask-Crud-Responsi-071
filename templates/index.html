@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Mahasiswa Teknik Komputer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='../static/logo.png') }}" alt="Logo">
+                <h1>Data Mahasiswa Teknik Komputer</h1>
+            </div>
+        </header>
+
+        <main>
+            <button class="add-btn" onclick="showAddModal()">Tambah Data</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>NIM</th>
+                        <th>Nama</th>
+                        <th>Asal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mhs in mahasiswa %}
+                    <tr>
+                        <td>{{ mhs.nim }}</td>
+                        <td>{{ mhs.nama }}</td>
+                        <td>{{ mhs.asal }}</td>
+                        <td class="actions">
+                            <button class="ubah" onclick="showEditModal('{{ mhs.nim }}', '{{ mhs.nama }}', '{{ mhs.asal }}')">Ubah</button>
+                            <button class="hapus" onclick="confirmDelete('{{ mhs.nim }}')">Hapus</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+
+        <!-- Add Modal -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <h2>Tambah Data Mahasiswa</h2>
+                <form action="{{ url_for('add_mahasiswa') }}" method="POST">
+                    <div class="form-group">
+                        <label for="nim">NIM:</label>
+                        <input type="text" id="nim" name="nim" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nama">Nama:</label>
+                        <input type="text" id="nama" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="asal">Asal:</label>
+                        <input type="text" id="asal" name="asal" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit">Simpan</button>
+                        <button type="button" onclick="hideAddModal()">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h2>Edit Data Mahasiswa</h2>
+                <form action="{{ url_for('update_mahasiswa') }}" method="POST">
+                    <input type="hidden" id="edit_nim" name="nim">
+                    <div class="form-group">
+                        <label for="edit_nama">Nama:</label>
+                        <input type="text" id="edit_nama" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_asal">Asal:</label>
+                        <input type="text" id="edit_asal" name="asal" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit">Update</button>
+                        <button type="button" onclick="hideEditModal()">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
